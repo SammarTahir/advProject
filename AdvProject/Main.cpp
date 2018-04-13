@@ -1,3 +1,16 @@
+/*
+$$\   $$\ $$\     $$\ $$$$$$$$\        $$$$$$\  $$\                                          $$\     
+$$ |  $$ |\$$\   $$  |\____$$  |      $$  __$$\ \__|                                         $$ |    
+\$$\ $$  | \$$\ $$  /     $$  /       $$ /  $$ |$$\  $$$$$$\   $$$$$$\   $$$$$$\   $$$$$$\ $$$$$$\   
+ \$$$$  /   \$$$$  /     $$  /        $$$$$$$$ |$$ |$$  __$$\ $$  __$$\ $$  __$$\ $$  __$$\\_$$  _|  
+ $$  $$<     \$$  /     $$  /         $$  __$$ |$$ |$$ |  \__|$$ /  $$ |$$ /  $$ |$$ |  \__| $$ |    
+$$  /\$$\     $$ |     $$  /          $$ |  $$ |$$ |$$ |      $$ |  $$ |$$ |  $$ |$$ |       $$ |$$\ 
+$$ /  $$ |    $$ |    $$$$$$$$\       $$ |  $$ |$$ |$$ |      $$$$$$$  |\$$$$$$  |$$ |       \$$$$  |
+\__|  \__|    \__|    \________|      \__|  \__|\__|\__|      $$  ____/  \______/ \__|        \____/ 
+															    $$ |                                
+															    $$ |                                
+															    \__|                                 */
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -20,7 +33,6 @@ struct node
 
 void addToStart(struct node** top, struct node** bottom);
 void addPassenger(struct node** top, struct node** bottom);
-void addElementAtPos(struct node* top, int position);
 void deleteElementAtEnd(struct node* top);
 void deleteElementAtStart(struct node** top);
 void deletePassenger(struct node* top, struct node* bottom, int position);
@@ -29,7 +41,7 @@ void displayList(struct node* top);
 int searchList(struct node* top, char search[]);
 void updateDetails(struct node* top, char search[]);
 int length(struct node* top);
-void displayListToFile(struct node* top);
+void printToFile(struct node* top);
 void deletePassenger(struct node* headptr, char search[20]);
 
 void main()
@@ -40,7 +52,8 @@ void main()
 	int temp;
 	int pos;
 	char search[20];
-
+	char stat;
+	
 	printf("1) Add passenger (Note: Passport Number must be unique)\n");
 	printf("2) Display all passenger to screen\n");
 	printf("3) Display passenger Details\n");
@@ -81,11 +94,19 @@ void main()
 			deletePassenger(headPtr, search);
 			break;
 		case 6:
-			printf("A. percent of players who travel from the UK\n");
-			printf("B. percent of players who travel from the Rest of Europe\n");
-
+			printf("A. percent of passenger who travel from the UK\n");
+			printf("B. percent of passenger who travel from the Rest of Europe\n");
+			printf("C. percent of passenger who travel from the Asia\n");
+			printf("D. percent of passenger who travel from the Americas\n");
+			printf("E. percent of passenger who travel from the Australasia\n");
+			printf("F. percent of passenger who spent on average one day in Ireland\n");
+			printf("G. percent of passenger who spent on average less than 3 days in Ireland\n");
+			printf("H. percent of passenger who spent on average less than 7 days in Ireland\n");
+			printf("I. percent of passenger who spent on average more than 7 days in Ireland\n");
+			scanf("%s", stat);
 			break;
 		case 7:
+			printToFile(headPtr);
 			break;
 		case 8:
 			
@@ -106,8 +127,6 @@ void main()
 		printf("Please enter -1 to exit\n");
 		scanf("%d", &choice);
 	}
-
-
 }
 
 // This method is run first to add passenger at the start of the list
@@ -406,7 +425,8 @@ void updateDetails(struct node* top, char search[]) {
 
 }
 
-void displayListToFile(struct node* top)
+// Outputting all of the passenger details to a file
+void printToFile(struct node* top)
 {
 	struct node* curr;
 	FILE* temp;
@@ -418,15 +438,101 @@ void displayListToFile(struct node* top)
 	{
 		while (curr != NULL)
 		{
-			fprintf(temp, "The name is %s\n", curr->name);
+			fprintf(temp, "Passport Number: %s\n", curr->passport);
+			fprintf(temp, "Full name: %s %s\n", curr->name, curr->surname);
+			fprintf(temp, "Year born: %d\n", curr->yearBorn);
+			fprintf(temp, "Email address: %s\n", curr->email);
+			// Switch statement areas travelling from
+			fprintf(temp, "Traveling from: ");
+			switch (curr->area)
+			{
+			case 1:
+				fprintf(temp, "UK\n");
+				break;
+			case 2:
+				fprintf(temp, "Rest of Europe\n");
+				break;
+			case 3:
+				fprintf(temp, "Asia\n");
+				break;
+			case 4:
+				fprintf(temp, "Americas\n");
+				break;
+			case 5:
+				fprintf(temp, "Australasia\n");
+				break;
+			default:
+				fprintf(temp, "Unknown. Wrong information was entered\n");
+				break;
+			} // End of Switch
 
+			  // Switch statement travel classes
+			fprintf(temp, "Travel class: ");
+			switch (curr->travelClass)
+			{
+			case 1:
+				fprintf(temp, "Economy\n");
+				break;
+			case 2:
+				fprintf(temp, "Premium Economy\n");
+				break;
+			case 3:
+				fprintf(temp, "Business Class\n");
+				break;
+			case 4:
+				fprintf(temp, "First Class\n");
+				break;
+			default:
+				fprintf(temp, "Unknown. Wrong information was entered\n");
+				break;
+			} // End of switch
+
+			  // Switch statement for trips per year
+			fprintf(temp, "Trips to Ireland per year: ");
+			switch (curr->numOfTrips)
+			{
+			case 1:
+				fprintf(temp, "Less than three times per year\n");
+				break;
+			case 2:
+				fprintf(temp, "Less than five times per year\n");
+				break;
+			case 3:
+				fprintf(temp, "More than five times per year\n");
+				break;
+			default:
+				fprintf(temp, "Unknown. Wrong information was entered\n");
+				break;
+			} // End of switch
+
+			  // Switch statement for duration
+			fprintf(temp, "Average length of duration: ");
+			switch (curr->duration)
+			{
+			case 1:
+				fprintf(temp, "One day\n");
+				break;
+			case 2:
+				fprintf(temp, "Less than 3 days\n");
+				break;
+			case 3:
+				fprintf(temp, "Less than 7 days\n");
+				break;
+			case 4:
+				fprintf(temp, "More than 7 days\n");
+				break;
+			default:
+				fprintf(temp, "Unknown. Wrong information was entered\n");
+				break;
+			} // End of switch
 			curr = curr->NEXT;
-
-		}
-
+			fprintf(temp, "\n");
+		} // End of while
+		// Closing file
 		fclose(temp);
-	}
+	} // End of if statement
 
+	printf("\nOutputting information to file: output.txt\n\n");
 }
 
 void deleteElementAtEnd(struct node* top)
@@ -482,45 +588,6 @@ int length(struct node* top)
 	}
 
 	return len;
-}
-
-void addElementAtPos(struct node* top, int position)
-{
-	int i;
-	struct node* temp;
-	struct node* newNode;
-	char ID[20];
-	int result;
-
-
-	printf("Please enter the student ID\n");
-	scanf("%s", ID);
-
-	result = searchList(top, ID);
-
-	if (result != -1)
-	{
-		printf("Not a unique ID\n");
-		return;
-	}
-
-
-	newNode = (struct node*)malloc(sizeof(struct node) * 1);
-
-	printf("Please enter the students name\n");
-	scanf("%s", newNode->name);
-
-
-	temp = top;
-
-	for (i = 0; i < position - 2; i++)
-	{
-		temp = temp->NEXT;
-	}
-
-	newNode->NEXT = temp->NEXT;
-	temp->NEXT = newNode;
-
 }
 
 void deleteElementAtStart(struct node** top)
