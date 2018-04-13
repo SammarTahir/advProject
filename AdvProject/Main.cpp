@@ -14,24 +14,28 @@ struct node
 	int numOfTrips;
 	int duration;
 	struct node* NEXT;
+	struct node* PREV;
 };
 
 
-void addToStart(struct node** top);
-void addPassenger(struct node* top);
+void addToStart(struct node** top, struct node** bottom);
+void addPassenger(struct node** top, struct node** bottom);
 void addElementAtPos(struct node* top, int position);
 void deleteElementAtEnd(struct node* top);
 void deleteElementAtStart(struct node** top);
-void deleteElementAtPos(struct node* top, int position);
+void deletePassenger(struct node* top, struct node* bottom, int position);
 void displayFull(struct node* top);
 void displayList(struct node* top);
 int searchList(struct node* top, char search[]);
+void updateDetails(struct node* top, char search[]);
 int length(struct node* top);
 void displayListToFile(struct node* top);
+void deletePassenger(struct node* headptr, char search[20]);
 
 void main()
 {
 	struct node* headPtr = NULL;
+	struct node* tailPtr = NULL;
 	int choice;
 	int temp;
 	int pos;
@@ -48,18 +52,14 @@ void main()
 	printf("Please enter -1 to exit\n");
 	scanf("%d", &choice);
 
-	while (choice != -1)
-	{
-		switch (choice)
-		{
+	while (choice != -1) {
+		switch (choice) {
 		case 1:
-			if (headPtr == NULL)
-			{
-				addToStart(&headPtr);
+			if (headPtr == NULL) {
+				addToStart(&headPtr, &tailPtr);
 			}
-			else
-			{
-				addPassenger(headPtr);
+			else {
+				addPassenger(&headPtr, &tailPtr);
 			}
 			break;
 		case 2:
@@ -67,19 +67,18 @@ void main()
 			break;
 		case 3:
 			displayFull(headPtr);
+			break;
 		case 4:
-			printf("Deleting from the end of the list\n");
-			if (headPtr->NEXT != NULL)
-			{
-				deleteElementAtEnd(headPtr);
-			}
-			else
-			{
-				deleteElementAtStart(&headPtr);
-			}
+			printf("Please enter your passport number\n");
+			scanf("%s", search);
+
+			updateDetails(headPtr, search);
 			break;
 		case 5:
-			printf("Displaying the length of the list\n");
+			printf("Please enter your passport number\n");
+			scanf("%s", search);
+
+			deletePassenger(headPtr, search);
 			break;
 		case 6:
 			printf("A. percent of players who travel from the UK\n");
@@ -87,55 +86,13 @@ void main()
 
 			break;
 		case 7:
-			if (headPtr != NULL)
-			{
-				deleteElementAtStart(&headPtr);
-			}
 			break;
 		case 8:
-			if (headPtr == NULL)
-			{
-				printf("Sorry the list is empty");
-			}
-
-			else
-			{
-				printf("Please the position you wish to add the node at\n");
-				scanf("%d", &pos);
-
-				if (pos < 2)
-				{
-					deleteElementAtStart(&headPtr);
-				}
-				else if (pos >= 2 && pos < length(headPtr))
-				{
-					deleteElementAtPos(headPtr, pos);
-				}
-				else
-				{
-					deleteElementAtEnd(headPtr);
-				}
-			}
-			break;
-		case 9:
-			printf("Please the position you wish to add the node at\n");
-			scanf("%d", &pos);
-
-			if (pos < 2)
-			{
-				addToStart(&headPtr);
-			}
-			else if (pos > length(headPtr))
-			{
-				addPassenger(headPtr);
-			}
-			else
-			{
-				addElementAtPos(headPtr, pos);
-			}
+			
 			break;
 		default:
 			printf("Invalid option\n");
+			break;
 		}
 
 		printf("1) Add passenger (Note: Passport Number must be unique)\n");
@@ -154,11 +111,12 @@ void main()
 }
 
 // This method is run first to add passenger at the start of the list
-void addToStart(struct node** top)
+void addToStart(struct node** top, struct node** bottom)
 {
 	char passport[20];
 	int result;
 	struct node* newNode;
+	struct node* curr;
 
 	printf("Please enter your passport number\n");
 	scanf("%s", passport);
@@ -204,14 +162,24 @@ void addToStart(struct node** top)
 	printf("1. One day \n2. Less than 3 days \n3. Less than 7 day \n4. More than 7 day\n");
 	scanf("%d", &newNode->duration);
 
-	newNode->NEXT = *top;
-	*top = newNode;
+	if (*top == NULL) {
+		*top = newNode;
+		*bottom = newNode;
+		newNode->NEXT = NULL;
+		newNode->PREV = NULL;
+	}
+	else {
+		newNode->PREV = NULL;
+		newNode->NEXT = curr;
+		curr->PREV = newNode;
+		*top = newNode;
+	}
 
 	printf("\n");
 }
 
 // Adding passengers to the end of the list
-void addPassenger(struct node* top)
+void addPassenger(struct node** top, struct node** bottom)
 {
 	struct node* curr;
 	struct node* newNode;
@@ -222,7 +190,7 @@ void addPassenger(struct node* top)
 	scanf("%s", passport);
 
 	// Checking to see if passport number is already being used
-	result = searchList(top, passport);
+	result = searchList(*top, passport);
 	if (result != -1)
 	{
 		printf("Passport number is already in database\n");
@@ -262,14 +230,23 @@ void addPassenger(struct node* top)
 	printf("1. One day \n2. Less than 3 days \n3. Less than 7 day \n4. More than 7 day\n");
 	scanf("%d", &newNode->duration);
 
-	curr = top;
-	while (curr->NEXT != NULL)
+	curr = *bottom;
+
+	if (*top == NULL)
 	{
-		curr = curr->NEXT;
+		*top = newNode;
+		*bottom = newNode;
+		newNode->PREV = NULL;
+		newNode->NEXT = NULL;
 	}
 
-	curr->NEXT = newNode;
-	newNode->NEXT = NULL;
+	else
+	{
+		newNode->NEXT = NULL;
+		newNode->PREV = curr;
+		curr->NEXT = newNode;
+		*bottom = newNode;
+	}
 
 }
 
@@ -390,6 +367,44 @@ void displayFull(struct node* top)
 	printf("\n");
 }
 
+// Updating details of passenger using passport number;
+void updateDetails(struct node* top, char search[]) {
+	struct node* curr;
+	int index = 0;
+
+	curr = top;
+	while (curr != NULL)
+	{
+		index++;
+		if (strcmp(curr->passport, search) == 0)
+		{
+			printf("Please enter the year the you were born\n");
+			scanf("%d", &curr->yearBorn);
+
+			printf("Please enter your email\n");
+			scanf("%s", curr->email);
+
+			printf("Which of the following areas did you travel from\n");
+			printf("1. UK \n2. Rest of Europe \n3. Asia \n4. Americas \n5. Australasia\n");
+			scanf("%d", &curr->area);
+
+			printf("What travel class did you use to travel to Ireland?\n");
+			printf("1. Economy \n2. Premium Economy \n3. Business Class \n4. First Class\n");
+			scanf("%d", &curr->travelClass);
+
+			printf("How many trips to Ireland do you make per year?\n");
+			printf("1. Less than three times per year \n2. Less than five times per year \n3. More than fives per year\n");
+			scanf("%d", &curr->numOfTrips);
+
+			printf("On average how long is your duration?\n");
+			printf("1. One day \n2. Less than 3 days \n3. Less than 7 day \n4. More than 7 day\n");
+			scanf("%d", &curr->duration);
+		}
+		curr = curr->NEXT;
+
+	}
+
+}
 
 void displayListToFile(struct node* top)
 {
@@ -435,7 +450,6 @@ void deleteElementAtEnd(struct node* top)
 
 int searchList(struct node* top, char search[])
 {
-
 	struct node* curr;
 	int index = 0;
 
@@ -520,13 +534,15 @@ void deleteElementAtStart(struct node** top)
 	free(temp);
 }
 
-void deleteElementAtPos(struct node* top, int position)
+// Delete passenger by passport number
+void deletePassenger(struct node* top,struct node* bottom, int position)
 {
 	struct node* temp;
 	struct node* prev;
 	int i;
 
 	temp = top;
+	prev = bottom;
 
 	for (i = 0; i < position - 1; i++)
 	{
@@ -534,6 +550,32 @@ void deleteElementAtPos(struct node* top, int position)
 		temp = temp->NEXT;
 	}
 
+	printf("%d",position);
 	prev->NEXT = temp->NEXT;
 	free(temp);
+}
+
+void deletePassenger(struct node* headptr, char search[20]) {
+	struct node *temp;
+	struct node *oldtemp;
+	int i;
+	temp = (struct node*)malloc(sizeof(struct node));
+	oldtemp = (struct node*)malloc(sizeof(struct node));
+	temp = headptr;
+
+	// loop through list till you get the element at position
+	for (i = 0; i < length(headptr); i++) {
+		if (temp->passport == search) {
+			break;
+		}
+		oldtemp = temp;
+		temp = temp->NEXT;
+	}
+
+	// bypass the deleted element
+	oldtemp->NEXT = temp->NEXT;
+
+	// free up deleted element memory
+	free(temp);
+	printf("Passenger has been deleted\n\n");
 }
