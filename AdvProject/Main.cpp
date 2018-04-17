@@ -9,7 +9,7 @@ $$ /  $$ |    $$ |    $$$$$$$$\       $$ |  $$ |$$ |$$ |      $$$$$$$  |\$$$$$$ 
 \__|  \__|    \__|    \________|      \__|  \__|\__|\__|      $$  ____/  \______/ \__|        \____/ 
 															    $$ |                                
 															    $$ |                                
-															    \__|                                 */
+													 		    \__|                                 */
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -42,7 +42,8 @@ int searchList(struct node* top, char search[]);
 void updateDetails(struct node* top, char search[]);
 int length(struct node* top);
 void printToFile(struct node* top);
-void deletePassenger(struct node* headptr, char search[20]);
+//void deletePassenger(struct node** top, char search[20]);
+void genStats(struct node* top, char stat);
 
 void main()
 {
@@ -52,7 +53,7 @@ void main()
 	int temp;
 	int pos;
 	char search[20];
-	char stat;
+	char stat = '?';
 	
 	printf("1) Add passenger (Note: Passport Number must be unique)\n");
 	printf("2) Display all passenger to screen\n");
@@ -91,7 +92,7 @@ void main()
 			printf("Please enter your passport number\n");
 			scanf("%s", search);
 
-			deletePassenger(headPtr, search);
+		//	deletePassenger(headPtr, search);
 			break;
 		case 6:
 			printf("A. percent of passenger who travel from the UK\n");
@@ -103,7 +104,8 @@ void main()
 			printf("G. percent of passenger who spent on average less than 3 days in Ireland\n");
 			printf("H. percent of passenger who spent on average less than 7 days in Ireland\n");
 			printf("I. percent of passenger who spent on average more than 7 days in Ireland\n");
-			scanf("%s", stat);
+			scanf("%s", &stat);
+			genStats(headPtr, stat);
 			break;
 		case 7:
 			printToFile(headPtr);
@@ -622,16 +624,16 @@ void deletePassenger(struct node* top,struct node* bottom, int position)
 	free(temp);
 }
 
-void deletePassenger(struct node* headptr, char search[20]) {
+void deletePassenger(struct node* top, char search[20]) {
 	struct node *temp;
 	struct node *oldtemp;
 	int i;
 	temp = (struct node*)malloc(sizeof(struct node));
 	oldtemp = (struct node*)malloc(sizeof(struct node));
-	temp = headptr;
+	temp = top;
 
 	// loop through list till you get the element at position
-	for (i = 0; i < length(headptr); i++) {
+	for (i = 0; i < length(top); i++) {
 		if (temp->passport == search) {
 			break;
 		}
@@ -645,4 +647,161 @@ void deletePassenger(struct node* headptr, char search[20]) {
 	// free up deleted element memory
 	free(temp);
 	printf("Passenger has been deleted\n\n");
+}
+
+// Generating stats for passengers
+void genStats(struct node* top, char stat){
+	struct node* curr;
+	int option = 0, countYear = 0;
+	int countUK = 0, countEurope = 0, countAsia = 0, countAmerica = 0, countAustralasia = 0;
+	int countOne = 0, countLess3 = 0, countLess7 = 0, countMore7 = 0;
+	int countEco = 0, countPEco = 0, countBusiness = 0, countFirst = 0;
+	curr = top;
+
+	// Getting count for all stats
+	while (curr != NULL)
+	{
+		switch (curr->area)
+		{
+		case 1:
+			 countUK++;
+			break;
+		case 2:
+			countEurope++;
+			break;
+		case 3:
+			countAsia++;
+			break;
+		case 4:
+			countAmerica++;
+			break;
+		case 5:
+			countAustralasia++;
+			break;
+		default:
+			break;
+		} // End of Switch
+		
+		switch (curr->duration)
+		{
+		case 1:
+			countOne++;
+			break;
+		case 2:
+			countLess3++;
+			break;
+		case 3:
+			countLess7++;
+			break;
+		case 4:
+			countMore7++;
+			break;
+		default:
+			break;
+		} // End of switch
+
+		switch (curr->travelClass)
+		{
+		case 1:
+			countEco++;
+			break;
+		case 2:
+			countPEco++;
+			break;
+		case 3:
+			countBusiness++;
+			break;
+		case 4:
+			countFirst++;
+			break;
+		default:
+			break;
+		} // End of switch
+
+		if (curr->yearBorn < 1980) {
+			countYear++;
+			printf("here");
+		}
+		curr = curr->NEXT;
+	} // while
+
+	do {
+		printf("Please choose a criteria: \n");
+		printf("1. Travel class \n2. Born before 1980 \n");
+		scanf("%d", &option);
+		if (option != 1 && option != 2) {
+			printf("Error - try again\n");
+		} // if
+	} while (option != 1 && option != 2); // doWhile
+
+
+	switch(stat) {
+	case 'A':
+	case 'a':
+		if (option == 1) {
+			printf("Percentage of passengers of Economy from the UK: %d%%\n", ((countUK / countEco) * 100));
+			printf("Percentage of passengers of Premium Economy from the UK: %d%%\n", ((countUK / countPEco) * 100));
+			printf("Percentage of passengers of Business Class from the UK: %d%%\n", ((countUK / countBusiness) * 100));
+			printf("Percentage of passengers of First Class from the UK: %d%%\n", ((countUK / countFirst) * 100));
+		}
+		else if (option == 2)
+		{
+			printf("Percentage of passengers of from the UK: %d%%\n", ((countUK / countYear) * 100));
+		}
+		break;
+	case 'B':
+	case 'b':
+		if (option == 1) {
+			printf("Percentage of passengers of Economy from the Rest of Europe: %d%%\n", ((countEurope / countEco) * 100));
+			printf("Percentage of passengers of Premium Economy from the Rest of Europe: %d%%\n", ((countEurope / countPEco) * 100));
+			printf("Percentage of passengers of Business Class from the Rest of Europe: %d%%\n", ((countEurope / countBusiness) * 100));
+			printf("Percentage of passengers of First Class from the Rest of Europe: %d%%\n", ((countEurope / countFirst) * 100));
+		}
+		else if (option == 2)
+		{
+			printf("Percentage of passengers of from the Rest of Europe: %d%%\n", ((countEurope / countYear) * 100));
+		}
+		break;
+	case 'C':
+	case 'c':
+		if (option == 1) {
+			printf("Percentage of passengers of Economy from the Asia: %d%%\n", ((countAsia / countEco) * 100));
+			printf("Percentage of passengers of Premium Economy from the Asia: %d%%\n", ((countAsia / countPEco) * 100));
+			printf("Percentage of passengers of Business Class from the Asia: %d%%\n", ((countAsia / countBusiness) * 100));
+			printf("Percentage of passengers of First Class from the Asia: %d%%\n", ((countAsia / countFirst) * 100));
+		}
+		else if (option == 2)
+		{
+			printf("Percentage of passengers of from the Asia: %d%%\n", ((countAsia / countYear) * 100));
+		}
+		break;
+	case 'D':
+	case 'd':
+		if (option == 1) {
+			printf("Percentage of passengers of Economy from the America: %d%%\n", ((countAmerica / countEco) * 100));
+			printf("Percentage of passengers of Premium Economy from the America: %d%%\n", ((countAmerica / countPEco) * 100));
+			printf("Percentage of passengers of Business Class from the America: %d%%\n", ((countAmerica / countBusiness) * 100));
+			printf("Percentage of passengers of First Class from the America: %d%%\n", ((countAmerica / countFirst) * 100));
+		}
+		else if (option == 2)
+		{
+			printf("Percentage of passengers of from the America: %d%%\n", ((countAmerica / countYear) * 100));
+		}
+		break;
+	case 'E':
+	case 'e':
+		if (option == 1) {
+			printf("Percentage of passengers of Economy from the Asia: %d%%\n", ((countAsia / countEco) * 100));
+			printf("Percentage of passengers of Premium Economy from the Asia: %d%%\n", ((countAsia / countPEco) * 100));
+			printf("Percentage of passengers of Business Class from the Asia: %d%%\n", ((countAsia / countBusiness) * 100));
+			printf("Percentage of passengers of First Class from the Asia: %d%%\n", ((countAsia / countFirst) * 100));
+		}
+		else if (option == 2)
+		{
+			printf("Percentage of passengers of from the Asia: %d%%\n", ((countAsia / countYear) * 100));
+		}
+		break;
+	default:
+		break;
+	} // Switch for stats
 }
