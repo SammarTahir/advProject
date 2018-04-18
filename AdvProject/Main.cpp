@@ -38,14 +38,14 @@ void deleteElementAtEnd(struct node* top);
 void deleteElementAtStart(struct node** top);
 void deletePassenger(struct node* top, struct node* bottom, int position);
 void displayFull(struct node* top);
-void displayList(struct node* top);
+void displayPassenger(struct node* top);
 int searchList(struct node* top, char search[]);
 void updateDetails(struct node* top, char search[]);
 int length(struct node* top);
 void printToFile(struct node* top);
 //void deletePassenger(struct node** top, char search[20]);
 void genStats(struct node* top, char stat);
-
+void sortPassenger(struct node* top);
 void main()
 {
 	struct node* headPtr = NULL;
@@ -78,10 +78,10 @@ void main()
 			}
 			break;
 		case 2:
-			displayList(headPtr);
+			displayFull(headPtr);
 			break;
 		case 3:
-			displayFull(headPtr);
+			displayPassenger(headPtr);
 			break;
 		case 4:
 			printf("Please enter your passport number\n");
@@ -112,7 +112,7 @@ void main()
 			printToFile(headPtr);
 			break;
 		case 8:
-			
+			sortPassenger(headPtr);
 			break;
 		default:
 			printf("Invalid option\n");
@@ -273,7 +273,7 @@ void addPassenger(struct node** top, struct node** bottom)
 }
 
 // Displaying just all passenger names to the list
-void displayList(struct node* top) {
+void displayPassenger(struct node* top) {
 	struct node* curr;
 	curr = top;
 
@@ -859,3 +859,71 @@ void genStats(struct node* top, char stat){
 	} // Switch for stats
 
 }
+
+// sorting the player
+void sortPassenger(struct node* top) {
+	struct node* temp;
+	struct node* count;
+
+	char passport[20];
+	char name[20];
+	char surname[20];
+	int yearBorn;
+	char email[30];
+	int area;
+	int travelClass;
+	int numOfTrips;
+	int duration;
+
+	temp = top;
+
+	for (temp->NEXT != NULL; temp = temp->NEXT;) {
+		for (count = temp->NEXT; count != NULL; count = count->NEXT) {
+			if (temp->yearBorn > count->yearBorn) {
+				// Copying values to temp variables
+				strcpy(passport, temp->passport);
+				strcpy(name, temp->name);
+				strcpy(surname, temp->surname);
+				yearBorn = temp->yearBorn;
+				strcpy(email, temp->email);
+				area = temp->area;
+				travelClass = temp->travelClass;
+				numOfTrips = temp->numOfTrips;
+				duration = temp->duration;
+				
+				// Moving up values
+				strcpy(temp->passport, count->passport);
+				strcpy(temp->name, count->name);
+				strcpy(temp->surname, count->surname);
+				temp->yearBorn = count->yearBorn;
+				strcpy(temp->email, count->email);
+				temp->area = count->area;
+				temp->travelClass = count->travelClass;
+				temp->numOfTrips = count->numOfTrips;
+				temp->duration = count->duration;
+				
+				// Setting values back to current node
+				strcpy(count->name, name);
+				strcpy(count->surname, surname);
+				strcpy(count->passport, passport);
+				count->yearBorn = yearBorn;
+				strcpy(count->email, email);
+				count->area = area;
+				count->travelClass = travelClass;
+				count->numOfTrips = numOfTrips;
+				count->duration = duration;
+			}
+		}
+	}
+	while (temp != NULL)
+	{
+		if (temp->area == 1)
+		{
+			printf("Passenger: %s %s Number: %s\n\n", temp->name, temp->surname, temp->passport);
+
+		}
+		temp = temp->NEXT;
+	} // End of while
+
+	printf("\n");
+} 
