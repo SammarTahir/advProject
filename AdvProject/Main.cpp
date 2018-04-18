@@ -9,7 +9,8 @@ $$ /  $$ |    $$ |    $$$$$$$$\       $$ |  $$ |$$ |$$ |      $$$$$$$  |\$$$$$$ 
 \__|  \__|    \__|    \________|      \__|  \__|\__|\__|      $$  ____/  \______/ \__|        \____/ 
 															    $$ |                                
 															    $$ |                                
-													 		    \__|                                 */
+													 		    \__|                                 
+																										*/
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -53,7 +54,7 @@ void main()
 	int temp;
 	int pos;
 	char search[20];
-	char stat = '?';
+	char stat = ' ';
 	
 	printf("1) Add passenger (Note: Passport Number must be unique)\n");
 	printf("2) Display all passenger to screen\n");
@@ -283,7 +284,7 @@ void displayList(struct node* top) {
 	} // End of while
 
 	printf("\n");
-}
+} 
 
 // Displaying all passenger details to the screen
 void displayFull(struct node* top)
@@ -746,7 +747,7 @@ void genStats(struct node* top, char stat){
 		}
 		else if (option == 2)
 		{
-			printf("Percentage of passengers of from the UK: %d%%\n", ((countUK / countYear) * 100));
+			printf("Percentage of passengers from the UK: %d%%\n", ((countUK / countYear) * 100));
 		}
 		break;
 	case 'B':
@@ -759,7 +760,7 @@ void genStats(struct node* top, char stat){
 		}
 		else if (option == 2)
 		{
-			printf("Percentage of passengers of from the Rest of Europe: %d%%\n", ((countEurope / countYear) * 100));
+			printf("Percentage of passengers from the Rest of Europe: %d%%\n", ((countEurope / countYear) * 100));
 		}
 		break;
 	case 'C':
@@ -772,7 +773,7 @@ void genStats(struct node* top, char stat){
 		}
 		else if (option == 2)
 		{
-			printf("Percentage of passengers of from the Asia: %d%%\n", ((countAsia / countYear) * 100));
+			printf("Percentage of passengers from the Asia: %d%%\n", ((countAsia / countYear) * 100));
 		}
 		break;
 	case 'D':
@@ -785,23 +786,76 @@ void genStats(struct node* top, char stat){
 		}
 		else if (option == 2)
 		{
-			printf("Percentage of passengers of from the America: %d%%\n", ((countAmerica / countYear) * 100));
+			printf("Percentage of passengers from the America: %d%%\n", ((countAmerica / countYear) * 100));
 		}
 		break;
 	case 'E':
 	case 'e':
 		if (option == 1) {
-			printf("Percentage of passengers of Economy from the Asia: %d%%\n", ((countAsia / countEco) * 100));
-			printf("Percentage of passengers of Premium Economy from the Asia: %d%%\n", ((countAsia / countPEco) * 100));
-			printf("Percentage of passengers of Business Class from the Asia: %d%%\n", ((countAsia / countBusiness) * 100));
-			printf("Percentage of passengers of First Class from the Asia: %d%%\n", ((countAsia / countFirst) * 100));
+			printf("Percentage of passengers of Economy from the  Australasia: %d%%\n", ((countAustralasia / countEco) * 100));
+			printf("Percentage of passengers of Premium Economy from the Australasia: %d%%\n", ((countAustralasia / countPEco) * 100));
+			printf("Percentage of passengers of Business Class from the Australasia: %d%%\n", ((countAustralasia / countBusiness) * 100));
+			printf("Percentage of passengers of First Class from the Australasia: %d%%\n", ((countAustralasia / countFirst) * 100));
 		}
 		else if (option == 2)
 		{
-			printf("Percentage of passengers of from the Asia: %d%%\n", ((countAsia / countYear) * 100));
+			printf("Percentage of passengers from the Australasia: %d%%\n", ((countAustralasia / countYear) * 100));
+		}
+		break;
+	case 'F':
+	case 'f':
+		if (option == 1) {
+			printf("Percentage of passengers of Economy who spent on average one day in Ireland: %d%%\n", ((countOne / countEco) * 100));
+			printf("Percentage of passengers of Premium Economy who spent on average one day in Ireland: %d%%\n", ((countOne / countPEco) * 100));
+			printf("Percentage of passengers of Business Class who spent on average one day in Ireland: %d%%\n", ((countOne / countBusiness) * 100));
+			printf("Percentage of passengers of First Class who spent on average one day in Ireland: %d%%\n", ((countOne / countFirst) * 100));
+		}
+		else if (option == 2)
+		{
+			printf("Percentage of passengers who spent on average one day in Ireland: %d%%\n", ((countOne / countYear) * 100));
+		}
+		break;
+	case 'G':
+	case 'g':
+		if (option == 1) {
+			printf("Percentage of passengers of Economy who spent on average less than 3 days in Ireland: %d%%\n", ((countLess3 / countEco) * 100));
+			printf("Percentage of passengers of Premium Economy who spent on average less than 3 days in Ireland: %d%%\n", ((countLess3 / countPEco) * 100));
+			printf("Percentage of passengers of Business Class who spent on average less than 3 days in Ireland: %d%%\n", ((countLess3 / countBusiness) * 100));
+			printf("Percentage of passengers of First Class who spent on average less than 3 days in Ireland: %d%%\n", ((countLess3 / countFirst) * 100));
+		}
+		else if (option == 2)
+		{
+			printf("Percentage of passengers who spend on average less than 3 days in Ireland: %d%%\n", ((countLess3 / countYear) * 100));
+		}
+		break;
+	case 'H':
+	case 'h':
+		if (option == 1) {
+			printf("Percentage of passengers of Economy who spent on average less than 7 days in Ireland: %d%%\n", ((countLess7 / countEco) * 100));
+			printf("Percentage of passengers of Premium Economy who spent on average less than 7 days in Ireland: %d%%\n", ((countLess7 / countPEco) * 100));
+			printf("Percentage of passengers of Business Class who spent on average less than than 7 days in Ireland: %d%%\n", ((countLess7 / countBusiness) * 100));
+			printf("Percentage of passengers of First Class who spent on average less than than 7 days in Ireland: %d%%\n", ((countLess7 / countFirst) * 100));
+		}
+		else if (option == 2)
+		{
+			printf("Percentage of passengers who spend on average less than than 7 days in Ireland: %d%%\n", ((countLess7 / countYear) * 100));
+		}
+		break;
+	case 'I':
+	case 'i':
+		if (option == 1) {
+			printf("Percentage of passengers of Economy who spent on average more than 7 days in Ireland: %d%%\n", ((countMore7 / countEco) * 100));
+			printf("Percentage of passengers of Premium Economy who spent on average more than 7 days in Ireland: %d%%\n", ((countMore7 / countPEco) * 100));
+			printf("Percentage of passengers of Business Class who spent on average more than than 7 days in Ireland: %d%%\n", ((countMore7 / countBusiness) * 100));
+			printf("Percentage of passengers of First Class who spent on average more than than 7 days in Ireland: %d%%\n", ((countMore7 / countFirst) * 100));
+		}
+		else if (option == 2)
+		{
+			printf("Percentage of passengers who spend on average more than than 7 days in Ireland: %d%%\n", ((countMore7 / countYear) * 100));
 		}
 		break;
 	default:
 		break;
 	} // Switch for stats
+
 }
