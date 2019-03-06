@@ -46,6 +46,7 @@ void printToFile(struct node* top);
 //void deletePassenger(struct node** top, char search[20]);
 void genStats(struct node* top, char stat);
 void sortPassenger(struct node* top);
+
 void main()
 {
 	struct node* headPtr = NULL;
@@ -557,6 +558,7 @@ void deleteElementAtEnd(struct node* top)
 	free(curr);
 }
 
+// Search for passport number
 int searchList(struct node* top, char search[])
 {
 	struct node* curr;
@@ -740,10 +742,10 @@ void genStats(struct node* top, char stat){
 	case 'A':
 	case 'a':
 		if (option == 1) {
-			printf("Percentage of passengers of Economy from the UK: %d%%\n", ((countUK / countEco) * 100));
-			printf("Percentage of passengers of Premium Economy from the UK: %d%%\n", ((countUK / countPEco) * 100));
-			printf("Percentage of passengers of Business Class from the UK: %d%%\n", ((countUK / countBusiness) * 100));
-			printf("Percentage of passengers of First Class from the UK: %d%%\n", ((countUK / countFirst) * 100));
+			printf("Percentage of passengers of Economy from the UK: %d%%\n", ((countUK / countEco) * 100 / 1));
+			printf("Percentage of passengers of Premium Economy from the UK: %d%%\n", ((countUK / countPEco) * 100 / 1));
+			printf("Percentage of passengers of Business Class from the UK: %d%%\n", ((countUK / countBusiness) * 100 / 1));
+			printf("Percentage of passengers of First Class from the UK: %d%%\n", ((countUK / countFirst) * 100 / 1));
 		}
 		else if (option == 2)
 		{

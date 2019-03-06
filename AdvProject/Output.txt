@@ -1,0 +1,63 @@
+Passport Number: 1
+Full name: 1 1
+Year born: 1
+Email address: 1
+Traveling from: UK
+Travel class: Economy
+Trips to Ireland per year: Less than three times per year
+Average length of duration: One day
+
+Passport Number: 2
+Full name: 2 2
+Year born: 2
+Email address: 2
+Traveling from: Rest of Europe
+Travel class: Premium Economy
+Trips to Ireland per year: Less than five times per year
+Average length of duration: Less than 3 days
+
+Passport Number: 3
+Full name: 3 3
+Year born: 3
+Email address: 3
+Traveling from: Asia
+Travel class: Business Class
+Trips to Ireland per year: More than five times per year
+Average length of duration: Less than 7 days
+
+Passport Number: 4
+Full name: 4 4
+Year born: 4
+Email address: 4
+Traveling from: Americas
+Travel class: First Class
+Trips to Ireland per year: More than five times per year
+Average length of duration: More than 7 days
+
+Passport Number: 5
+Full name: 1 1
+Year born: 5
+Email address: 5
+Traveling from: Australasia
+Travel class: First Class
+Trips to Ireland per year: More than five times per year
+Average length of duration: Less than 3 days
+
+Passport Number: 8
+Full name: 2 2
+Year born: 2
+Email address: 2
+Traveling from: Australasia
+Travel class: First Class
+Trips to Ireland per year: More than five times per year
+Average length of duration: Less than 3 days
+
+Passport Number: 0
+Full name: 9 8
+Year born: 7
+Email address: 6
+Traveling from: Australasia
+Travel class: First Class
+Trips to Ireland per year: More than five times per year
+Average length of duration: Less than 3 days
+
